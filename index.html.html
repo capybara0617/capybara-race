@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump Scare Page</title>
+    <style>
+        body {
+            margin: 0;
+            background-image: url('background.jpg'); /* 替换为你的背景图片路径 */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            overflow: hidden; /* 防止滚动条出现 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none; /* 隐藏光标 */
+        }
+        #capybara {
+            display: none;
+            position: absolute; /* 使其能够覆盖整个屏幕 */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('capybara.png'); /* 替换为你的图片路径 */
+            background-size: cover;
+            background-position: center;
+        }
+        .invert {
+            filter: invert(1); /* 负片效果 */
+        }
+        #start {
+            position: relative;
+            z-index: 1;
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="start">start the game！</button>
+    <div id="capybara"></div>
+    <audio id="scare-audio" loop>
+        <source src="your-audio-file.mp3" type="audio/mp3"> <!-- 替换为你的音频文件路径 -->
+    </audio>
+
+    <script>
+        document.getElementById('start').addEventListener('click', function() {
+            const capybara = document.getElementById('capybara');
+            const scareAudio = document.getElementById('scare-audio');
+            const startButton = document.getElementById('start');
+
+            // 隐藏“开始惊吓！”按钮
+            startButton.style.display = 'none';
+
+            // 进入全屏模式
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+
+            // 播放音频
+            scareAudio.volume = 1.0;
+            scareAudio.play().catch(error => {
+                console.log('音频播放失败:', error);
+            });
+
+            // 显示图片并开始闪烁
+            capybara.style.display = 'block';
+            let flashing = setInterval(() => {
+                capybara.classList.toggle('invert'); // 切换负片效果
+            }, 50); // 每50毫秒闪烁一次（非常快）
+
+
+        });
+
+        // 监听全屏模式更改事件
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                // 用户退出全屏时的处理
+                console.log('退出全屏模式');
+            }
+        });
+
+        // 监听全屏模式更改事件（兼容不同浏览器）
+        document.addEventListener('webkitfullscreenchange', () => {
+            if (!document.webkitFullscreenElement) {
+                // 用户退出全屏时的处理
+                console.log('退出全屏模式');
+            }
+        });
+        document.addEventListener('mozfullscreenchange', () => {
+            if (!document.mozFullScreenElement) {
+                // 用户退出全屏时的处理
+                console.log('退出全屏模式');
+            }
+        });
+        document.addEventListener('msfullscreenchange', () => {
+            if (!document.msFullscreenElement) {
+                // 用户退出全屏时的处理
+                console.log('退出全屏模式');
+            }
+        });
+    </script>
+</body>
+</html>
